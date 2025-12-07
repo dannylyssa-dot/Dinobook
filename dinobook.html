@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connor Found a Mystery Egg</title>
+    <style>
+        /* --- CSS (Screen Look adjusted for maximum emoji compatibility) --- */
+        body {
+            font-family: monospace, sans-serif; /* Added sans-serif fallback */
+            background-color: #0d1a0d;
+            color: #39ff14;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; 
+        }
+
+        #book-screen {
+            width: 80%;
+            max-width: 800px;
+            padding: 30px;
+            border: 2px solid #39ff14;
+            box-shadow: 0 0 20px #39ff14;
+            background-color: rgba(0, 0, 0, 0.5);
+            text-shadow: 0 0 5px rgba(57, 255, 20, 0.7); 
+            display: flex; 
+            flex-direction: column;
+            justify-content: space-between; 
+            height: 90vh; 
+        }
+
+        .chapter-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        /* NEW: Message for loading/delay warning */
+        #delay-warning {
+            color: #ff3914; /* Reddish warning color */
+            text-align: center;
+            font-size: 1.1em;
+            margin-top: 15px;
+            text-shadow: 0 0 8px rgba(255, 57, 20, 0.8);
+        }
+
+        .page-content {
+            flex-grow: 1; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            text-align: center;
+            overflow: hidden; 
+            position: relative; 
+            padding-bottom: 80px; 
+        }
+
+        .line-container {
+            position: absolute; 
+            bottom: 60px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            display: none; 
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            font-size: 1.2em;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.9); 
+            border: 1px solid #39ff14;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #39ff14;
+        }
+        
+        .line-container.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        .page-visual {
+            font-size: 150px; 
+            max-width: 100%;
+            max-height: 100%; 
+            display: block;
+            opacity: 0; 
+            transition: opacity 1s ease-in-out;
+            /* REMOVED filter: drop-shadow to fix green boxes */
+        }
+
+        .page-visual.visible {
+            opacity: 1;
+        }
+
+        #controls {
+            margin-top: 10px; 
+            text-align: center;
+        }
+
+        button {
+            background-color: #0d1a0d;
+            color: #39ff14;
+            border: 1px solid #39ff14;
+            padding: 12px 25px;
+            cursor: pointer;
+            box-shadow: 0 0 5px #39ff14;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #39ff14;
+            color: #0d1a0d;
+        }
+    </style>
+</head>
+<body>
+    
+    <audio id="audio-unlocker" controls style="display:none;"></audio>
+
+    <div id="book-screen">
+        <h2 class="chapter-title">:: LOG 001: THE T-REX PROJECT ::</h2>
+        
+        <p id="delay-warning">⚠️ **NOTE:** Narration may require a second click to start in some browsers like Chrome.</p>
+
+        <div class="page-content" id="page-content-0">
+            <p class="line-container" id="line0">Ten-year-old Leo knew the creek better than his own bedroom.</p>
+            <span class="page-visual" id="vis0">👦🌲🏞️</span>
+        </div>
+
+        <div class="page-content" id="page-content-1">
+            <p class="line-container" id="line1">He found a huge, pale jade egg exposed by a recent landslide.</p>
+            <span class="page-visual" id="vis1">🥚⛏️</span>
+        </div>
+
+        <div class="page-content" id="page-content-2">
+            <p class="line-container" id="line2">It was impossibly warm to the touch, and something inside was tapping.</p>
+            <span class="page-visual" id="vis2">🔥🥚👆</span>
+        </div>
+
+        <div class="page-content" id="page-content-3">
+            <p class="line-container" id="line3">Leo carefully took the precious egg home and kept it warm in his blanket fort.</p>
+            <span class="page-visual" id="vis3">🏡🛡️🛌</span>
+        </div>
+
+        <div class="page-content" id="page-content-4">
+            <p class="line-container" id="line4">The next morning, the egg cracked open, and out popped a creature no bigger than his hand.</p>
+            <span class="page-visual" id="vis4">🐣🦖🤏</span>
+        </div>
+
+        <div class="page-content" id="page-content-5">
+            <p class="line-container" id="line5">It was a tiny T-Rex with enormous, curious eyes, and Leo decided to call him Rex.</p>
+            <span class="page-visual" id="vis5">👀💚</span>
+        </div>
+        
+        <div class="page-content" id="page-content-6">
+            <p class="line-container" id="line6">Rex had an appetite to match his ancient lineage, growing larger every single day.</p>
+            <span class="page-visual" id="vis6">🍖⬆️📈</span>
+        </div>
+        
+        <div class="page-content" id="page-content-7">
+            <p class="line-container" id="line7">Soon, Rex was the size of a large dog, and keeping him a secret was getting much harder.</p>
+            <span class="page-visual" id="vis7">🐕🤫</span>
+        </div>
+        
+        <div class="page-content" id="page-content-8">
+            <p class="line-container" id="line8">They played together every evening, chasing balls and wrestling in the overgrown yard.</p>
+            <span class="page-visual" id="vis8">⚽️🦖😂</span>
+        </div>
+
+        <div class="page-content" id="page-content-9">
+            <p class="line-container" id="line9">After only a few months, Rex stood taller than Leo, towering over him with his powerful legs.</p>
+            <span class="page-visual" id="vis9">🧍🦖⏫</span>
+        </div>
+
+        <div class="page-content" id="page-content-10">
+            <p class="line-container" id="line10">Leo fashioned a makeshift saddle out of ropes and blankets, preparing for their first grand adventure.</p>
+            <span class="page-visual" id="vis10">🧶鞍⚔️</span>
+        </div>
+
+        <div class="page-content" id="page-content-11">
+            <p class="line-container" id="line11">With a great surge of energy, Leo climbed aboard his best friend, who was now a magnificent beast.</p>
+            <span class="page-visual" id="vis11">🏇🦖💪</span>
+        </div>
+
+        <div class="page-content" id="page-content-12">
+            <p class="line-container" id="line12">Together, they rode toward the setting sun, ready for a lifetime of incredible, prehistoric friendship.</p>
+            <span class="page-visual" id="vis12">🌅💖</span>
+        </div>
+
+
+        <div id="controls">
+            <button onclick="playNarrator()">Begin Story (Click to Continue)</button>
+        </div>
+    </div>
+
+    <script>
+        const pageContents = document.querySelectorAll('.page-content');
+        const controls = document.getElementById('controls');
+        const chapterTitle = document.querySelector('.chapter-title');
+        const delayWarning = document.getElementById('delay-warning');
+        let currentPageIndex = -1; 
+        let profoundMaleVoice = null;
+        const unlocker = document.getElementById('audio-unlocker');
+        
+        // Hides all pages initially
+        pageContents.forEach(page => page.style.display = 'none');
+
+        // --- TTS Setup ---
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance();
+        utterance.rate = 1.0; 
+        
+        function findProfoundMaleVoice() {
+            const voices = synth.getVoices();
+            const preferredNames = [
+                "Google UK English Male", "Microsoft David Desktop", "Alex", "Zoe", 
+                "Daniel", "US English Male" 
+            ];
+
+            for (let name of preferredNames) {
+                const foundVoice = voices.find(v => v.name.includes(name) || (v.lang.startsWith('en-') && !v.name.includes('Female')));
+                if (foundVoice) {
+                    profoundMaleVoice = foundVoice;
+                    return;
+                }
+            }
+            profoundMaleVoice = voices.find(v => v.lang.startsWith('en-') && !v.name.includes('Female')) || voices[0];
+        }
+
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = findProfoundMaleVoice;
+        } else {
+            findProfoundMaleVoice();
+        }
+
+        function readPage(text) {
+            if (synth.speaking) {
+                synth.cancel(); 
+            }
+            const narrationText = text.replace('Leo', 'Connor') + "..."; 
+            utterance.text = narrationText;
+            
+            if (profoundMaleVoice) {
+                utterance.voice = profoundMaleVoice;
+            }
+            
+            synth.speak(utterance);
+        }
+
+        function showPage(indexToShow) {
+            if (synth.speaking) {
+                synth.cancel(); 
+            }
+            
+            // 1. Hide the previous page
+            if (currentPageIndex >= 0 && currentPageIndex < pageContents.length) {
+                const prevPageDiv = pageContents[currentPageIndex];
+                
+                prevPageDiv.querySelector('.line-container').classList.remove('visible');
+                prevPageDiv.querySelector('.page-visual').classList.remove('visible');
+                
+                setTimeout(() => {
+                    prevPageDiv.style.display = 'none';
+                }, 800); 
+            }
+
+            // 2. Show the current page
+            currentPageIndex = indexToShow;
+            if (currentPageIndex < pageContents.length) {
+                const currentPageDiv = pageContents[currentPageIndex];
+                const currentLineText = currentPageDiv.querySelector('.line-container').textContent;
+                
+                currentPageDiv.style.display = 'flex'; 
+                
+                setTimeout(() => {
+                    currentPageDiv.querySelector('.page-visual').classList.add('visible');
+                    currentPageDiv.querySelector('.line-container').classList.add('visible');
+                }, 100); 
+
+                // 3. Start reading the text
+                readPage(currentLineText);
+                
+                // 4. Update button text for the next action
+                if (currentPageIndex === pageContents.length - 1) {
+                    controls.querySelector('button').textContent = "The End (Click to finish)";
+                } else {
+                    controls.querySelector('button').textContent = `Next Page ${currentPageIndex + 2}/${pageContents.length} (Click to continue)`;
+                }
+            } else {
+                // End of the book
+                controls.querySelector('button').textContent = ":: LOG COMPLETE ::";
+                readPage("Thank you for reading Connor Found a Mystery Egg!");
+                
+                setTimeout(() => {
+                     controls.querySelector('button').style.display = 'none';
+                }, 5000); 
+            }
+        }
+
+        function playNarrator() {
+            // **CHROME FIX: Trigger on first click, hide warning**
+            if (currentPageIndex === -1) {
+                chapterTitle.style.display = 'none';
+                delayWarning.style.display = 'none'; // Hide the warning after the first click
+                
+                // Attempt to unlock audio context on first user click
+                try {
+                    // Play a silent audio stream to unlock
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    oscillator.connect(audioContext.destination);
+                    oscillator.start(0);
+                    oscillator.stop(0); 
+                } catch(e) {
+                    console.log('Audio Context unlock failed:', e);
+                }
+
+                showPage(0); // Show Page 1 (index 0) on the first click
+            } else {
+                // Otherwise, advance as normal
+                showPage(currentPageIndex + 1);
+            }
+        }
+
+        // Attach the main function to the control button
+        document.querySelector('button').onclick = playNarrator;
+
+        // Ensure voices are loaded for some browsers
+        synth.getVoices(); 
+    </script>
+</body>
+</html>
